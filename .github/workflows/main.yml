@@ -1,0 +1,39 @@
+name: main
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: setup
+        uses: actions/setup-node@v6
+        with:
+          node-version: latest
+
+      - name: restore
+        run: npm ci
+
+      - name: lint
+        run: npm run lint
+
+      - name: test
+        run: npm run test:unit
+
+      - name: build
+        run: npm build
+
+      - name: deploy
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: michaelbradvica
+          publish-profile: ${{ secrets.PUBLISH_PROFILE }}
+          package: "./dist"
