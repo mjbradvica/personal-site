@@ -29,7 +29,7 @@ jobs:
         run: npm run test
 
       - name: build
-        run: npm build
+        run: npm run build
 
       - name: deploy
         uses: azure/webapps-deploy@v3
